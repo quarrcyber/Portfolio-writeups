@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gobabi gửi em</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ffdfd3, #dcd6f7);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #4a4a4a;
+    }
+
+    .container {
+      display: flex;
+      gap: 30px;
+      max-width: 65vw;
+      width: 65vw;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 35px;
+      border-radius: 25px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      position: relative;
+      height: 400px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .letter-content {
+      flex: 1;
+      padding: 20px;
+      line-height: 1.8;
+      font-size: 16px;
+      text-align: left;
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .letter-content h2 {
+      margin-top: 0;
+      color: #d88;
+      font-weight: 500;
+      font-style: italic;
+    }
+
+    .signature {
+      text-align: right;
+      font-style: italic;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .gif-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .love-gif {
+      height: 100%;
+      width: auto;
+      object-fit: contain;
+      animation: fadein 1s ease-in-out;
+    }
+    
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .counter {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      padding: 15px 25px;
+      background: rgba(255, 255, 255, 0.95);
+      border-top: 3px solid #e91e63;
+      border-radius: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      z-index: 999;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .counter span {
+      color: #e91e63;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        padding: 20px;
+        height: auto;
+      }
+      .counter {
+        bottom: 20px;
+        font-size: 16px;
+      }
+    }
+
+    /* TRANG MẬT KHẨU (SỬA LỖI LAYOUT ẢNH) */
+    .lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #ffdfd3, #dcd6f7); /* Giữ nguyên màu đẹp */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+
+    .lock-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      max-width: 90%;
+      width: 400px;
+    }
+
+    .lock-title {
+      color: #e91e63;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .lock-instruction {
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    /* SỬA LAYOUT ẢNH THEO BẢN VẼ */
+    .images-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 2 cột thay vì 3 */
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    /* Ảnh 3 chiếm 2 cột */
+    .images-grid .image-box:nth-child(3) {
+      grid-column: span 2;
+    }
+
+    .image-box {
+      width: 100%;
+      height: 100px; /* Cao hơn để phù hợp với bản vẽ */
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .password-display {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .digit {
+      width: 40px;
+      height: 40px;
+      background: #f1f1f1;
+      border: 2px solid #e91e63;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: #e91e63;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .key {
+      width: 100%;
+      height: 50px;
+      border: none;
+      border-radius: 10px;
+      background: #e91e63;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .key:hover {
+      background: #c2185b;
+      transform: scale(1.05);
+    }
+
+    .key:active {
+      transform: scale(0.95);
+    }
+
+    .special {
+      background: #2196f3 !important;
+    }
+
+    .error-message {
+      color: red;
+      min-height: 20px;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    /* Hiệu ứng rung */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+      20%, 40%, 60%, 80% { transform: translateX(10px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- TRANG MẬT KHẨU -->
+  <div id="lock-screen" class="lock-screen">
+    <div class="lock-container">
+      <h2 class="lock-title">🔒 Gobabi gửi em</h2>
+      <p class="lock-instruction">Nhập mật khẩu để mở thư tình</p>
+
+      <!-- 5 ô ảnh cá nhân (layout đúng theo bản vẽ) -->
+      <div class="images-grid">
+        <div class="image-box"><img src="https://via.placeholder.com/150?text=Ảnh+1" alt="Ảnh 1"></div>
+        <div class="image-box"><img src="https://via.placeholder.com/150?text=Ảnh+2" alt="Ảnh 2"></div>
+        <div class="image-box"><img src="https://via.placeholder.com/300x150?text=Ảnh+3" alt="Ảnh 3"></div>
+        <div class="image-box"><img src="https://via.placeholder.com/150?text=Ảnh+4" alt="Ảnh 4"></div>
+        <div class="image-box"><img src="https://via.placeholder.com/150?text=Ảnh+5" alt="Ảnh 5"></div>
+      </div>
+
+      <!-- Hiển thị mật khẩu -->
+      <div class="password-display">
+        <span class="digit">•</span>
+        <span class="digit">•</span>
+        <span class="digit">•</span>
+        <span class="digit">•</span>
+      </div>
+
+      <!-- Bàn phím số -->
+      <div class="keypad">
+        <button class="key" data-digit="1">1</button>
+        <button class="key" data-digit="2">2</button>
+        <button class="key" data-digit="3">3</button>
+        <button class="key" data-digit="4">4</button>
+        <button class="key" data-digit="5">5</button>
+        <button class="key" data-digit="6">6</button>
+        <button class="key" data-digit="7">7</button>
+        <button class="key" data-digit="8">8</button>
+        <button class="key" data-digit="9">9</button>
+        <button class="key special" id="clear-key">⌫</button>
+        <button class="key" data-digit="0">0</button>
+        <button class="key special" id="submit-key">✓</button>
+      </div>
+
+      <p id="error-message" class="error-message"></p>
+    </div>
+  </div>
+
+  <!-- TRANG THƯ TÌNH YÊU (GIỮ NGUYÊN) -->
+  <div class="container">
+    <!-- Bức thư -->
+    <div class="letter-content">
+      <h2>Still in love with Hiền Thục💗</h2>
+      <div id="typewriter-content" style="white-space: pre-wrap;"></div>
+    </div>
+
+    <!-- GIF -->
+    <div class="gif-container">
+      <img 
+        src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWtuMGk1cnVpZGFrZTFscHh6YTNubzJlenlyMGRhZHJxYmI0cXFucCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/x1nzqRHmHBlQ2duORJ/giphy.gif" 
+        alt="Love Animation" 
+        class="love-gif"
+      />
+    </div>
+  </div>
+
+  <!-- Đồng hồ đếm ngược -->
+  <div class="counter">
+    <div>Vibing since day one💕</div>
+    <div>
+      <span id="years">00</span> years
+      <span id="days">000</span> days
+      <span id="hours">00</span> hours
+      <span id="minutes">00</span> minutes
+      <span id="seconds">00</span> seconds
+    </div>
+  </div>
+
+  <!-- ÂM THANH NỀN -->
+  <audio id="backgroundMusic" loop>
+    <source src="https://od.lk/d/NzhfNzY2Mjg3OTBf/ngay_dau_tien.mp3" type="audio/mpeg">
+    Trình duyệt của bạn không hỗ trợ audio.
+  </audio>
+
+  <!-- NÚT ĐIỀU KHIỂN ÂM THANH -->
+  <div class="music-control" style="position: fixed; top: 20px; right: 20px; z-index: 999;">
+    <button onclick="toggleMusic()" style="padding: 8px 16px; background: #e91e63; color: white; border: none; border-radius: 20px; cursor: pointer;">
+      🎵 Music <on>
+      <off></off>
+    </button>
+  </div>
+
+  <script>
+    // HIỆU ỨNG GÕ MÁY
+    const typewriterElement = document.getElementById('typewriter-content');
+    const fullText = `Nếu có thể chọn một nơi an toàn, đó sẽ là bên cạnh em.
+Càng dành nhiều thời gian bên em, anh càng yêu em nhiều hơn.
+Đoạn văn này chỉ là ví dụ minh họa, không phản ánh cảm xúc thật sự.
+
+— Love _`;
+
+    function typeWriter(text, i = 0) {
+      if (i < text.length) {
+        typewriterElement.innerHTML = text.substring(0, i + 1) + '<span style="opacity:0.8;">|</span>';
+        setTimeout(() => typeWriter(text, i + 1), 30);
+      } else {
+        typewriterElement.innerHTML = text;
+      }
+    }
+
+    setTimeout(() => {
+      typeWriter(fullText);
+    }, 1000);
+
+    // ĐỒNG HỒ ĐẾM NGƯỢC
+    function updateCounter() {
+      const startDate = new Date("2023-11-19T00:00:00+07:00").getTime();
+      const nowVietnam = new Date(
+        new Date().toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" })
+      ).getTime();
+      const diff = nowVietnam - startDate;
+
+      if (diff < 0) {
+        document.getElementById('years').textContent = "00";
+        document.getElementById('days').textContent = "000";
+        document.getElementById('hours').textContent = "00";
+        document.getElementById('minutes').textContent = "00";
+        document.getElementById('seconds').textContent = "00";
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const years = Math.floor(totalSeconds / (365 * 24 * 60 * 60));
+      const remainingAfterYears = totalSeconds % (365 * 24 * 60 * 60);
+      const days = Math.floor(remainingAfterYears / (24 * 60 * 60));
+      const hours = Math.floor((remainingAfterYears % (24 * 60 * 60)) / (60 * 60));
+      const minutes = Math.floor((remainingAfterYears % (60 * 60)) / 60);
+      const seconds = Math.floor(remainingAfterYears % 60);
+
+      document.getElementById('years').textContent = String(years).padStart(2, '0');
+      document.getElementById('days').textContent = String(days).padStart(3, '0');
+      document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+      document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    }
+
+    setInterval(updateCounter, 1000);
+    updateCounter();
+
+    // HÀM BẬT/TẮT NHẠC
+    function toggleMusic() {
+      const music = document.getElementById('backgroundMusic');
+      if (music.paused) {
+        music.play();
+        alert("🎶 Nhạc như ri có hay hong :3 Nghe bài ni với anh nha ❤️");
+      } else {  
+        music.pause();
+        alert("🔇 Nhạc tắt ùii. Em có thể bật lại bất cứ lúc nào nè!");
+      }
+    }
+
+    // TỰ ĐỘNG PHÁT NHẠC KHI MỞ TRANG (TÙY CHỌN)
+    setTimeout(() => {
+      if (!musicInitialized) {
+        const music = document.getElementById('backgroundMusic');
+        music.muted = false;
+        music.play().catch(() => {});
+      }
+    }, 3000);
+
+    // HỆ THỐNG MẬT KHẨU (ĐÃ SỬA LỖI)
+    document.addEventListener('DOMContentLoaded', () => {
+      const lockScreen = document.getElementById('lock-screen');
+      const passwordDigits = document.querySelectorAll('.password-display .digit');
+      const errorMessage = document.getElementById('error-message');
+      const clearKey = document.getElementById('clear-key');
+      const submitKey = document.getElementById('submit-key');
+      const keys = document.querySelectorAll('.key[data-digit]');
+      
+      // CÀI ĐẶT MẬT KHẨU (THAY "1811" BẰNG MẬT KHẨU CỦA BẠN)
+      const CORRECT_PASSWORD = "1811";
+      let currentPassword = "";
+
+      // XỬ LÝ NHẬP SỐ
+      keys.forEach(key => {
+        key.addEventListener('click', () => {
+          if (currentPassword.length < 4) {
+            currentPassword += key.dataset.digit;
+            updatePasswordDisplay();
+          }
+        });
+      });
+
+      // XÓA MẬT KHẨU
+      clearKey.addEventListener('click', () => {
+        currentPassword = "";
+        updatePasswordDisplay();
+        hideError();
+      });
+
+      // KIỂM TRA MẬT KHẨU
+      submitKey.addEventListener('click', checkPassword);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') checkPassword();
+      });
+
+      function updatePasswordDisplay() {
+        passwordDigits.forEach((digit, index) => {
+          digit.textContent = index < currentPassword.length ? "•" : "";
+        });
+      }
+
+      function hideError() {
+        errorMessage.textContent = "";
+      }
+
+      function checkPassword() {
+        if (currentPassword === CORRECT_PASSWORD) {
+          // ẨN TRANG MẬT KHẨU VỚI HIỆU ỨNG
+          lockScreen.style.opacity = "0";
+          setTimeout(() => {
+            lockScreen.style.display = "none";
+            
+            // TỰ ĐỘNG PHÁT NHẠC SAU KHI MỞ KHÓA
+            const music = document.getElementById('backgroundMusic');
+            if (music) {
+              music.play().catch(e => console.log("Lỗi phát nhạc:", e));
+            }
+          }, 500);
+        } else {
+          errorMessage.textContent = "❌ Sai mật khẩu! Thử lại.";
+          currentPassword = "";
+          updatePasswordDisplay();
+          // HIỆU ỨNG RUNG
+          lockScreen.style.animation = "shake 0.5s";
+          setTimeout(() => {
+            lockScreen.style.animation = "";
+          }, 500);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

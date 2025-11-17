@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gobabi gửi em</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ffdfd3, #dcd6f7);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #4a4a4a;
+    }
+
+    .container {
+      display: flex;
+      gap: 30px;
+      max-width: 65vw;
+      width: 65vw;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 35px;
+      border-radius: 25px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      position: relative;
+      height: 400px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .letter-content {
+      flex: 1;
+      padding: 20px;
+      line-height: 1.8;
+      font-size: 16px;
+      text-align: left;
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .letter-content h2 {
+      margin-top: 0;
+      color: #d88;
+      font-weight: 500;
+      font-style: italic;
+    }
+
+    .signature {
+      text-align: right;
+      font-style: italic;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .gif-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .love-gif {
+      height: 100%;
+      width: auto; /* SỬA LỖI: auto+5 → auto */
+      object-fit: contain;
+      animation: fadein 1s ease-in-out;
+    }
+    
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .counter {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      padding: 15px 25px;
+      background: rgba(255, 255, 255, 0.95);
+      border-top: 3px solid #e91e63;
+      border-radius: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      z-index: 999;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .counter span {
+      color: #e91e63;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        padding: 20px;
+        height: auto;
+      }
+      .counter {
+        bottom: 20px;
+        font-size: 16px;
+      }
+    }
+
+    .falling-heart {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: #ff6b6b;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      animation: fall 8s linear infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Bức thư -->
+    <div class="letter-content">
+      <h2>Still in love with Hiền Thục💗</h2>
+      <div id="typewriter-content" style="white-space: pre-wrap;"></div>
+    </div>
+
+    <!-- GIF -->
+    <div class="gif-container">
+      <img 
+        src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWtuMGk1cnVpZGFrZTFscHh6YTNubzJlenlyMGRhZHJxYmI0cXFucCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/x1nzqRHmHBlQ2duORJ/giphy.gif" 
+        alt="Love Animation" 
+        class="love-gif"
+      />
+    </div>
+  </div>
+
+  <!-- Đồng hồ đếm ngược -->
+  <div class="counter">
+    <div>Vibing since day one💕</div>
+    <div>
+      <span id="years">00</span> years
+      <span id="days">000</span> days
+      <span id="hours">00</span> hours
+      <span id="minutes">00</span> minutes
+      <span id="seconds">00</span> seconds
+    </div>
+  </div>
+
+  <script>
+    // HIỆU ỨNG GÕ MÁY
+    const typewriterElement = document.getElementById('typewriter-content');
+    const fullText = `Nếu có thể chọn một nơi an toàn, đó sẽ là bên cạnh em.
+Càng dành nhiều thời gian bên em, anh càng yêu em nhiều hơn.
+Đoạn văn này chỉ là ví dụ minh họa, không phản ánh cảm xúc thật sự.
+
+— Love _`;
+
+    function typeWriter(text, i = 0) {
+      if (i < text.length) {
+        typewriterElement.innerHTML = text.substring(0, i + 1) + '<span style="opacity:0.8;">|</span>';
+        setTimeout(() => typeWriter(text, i + 1), 30);
+      } else {
+        typewriterElement.innerHTML = text;
+      }
+    }
+
+    setTimeout(() => {
+      typeWriter(fullText);
+    }, 1000);
+
+    // ĐỒNG HỒ ĐẾM NGƯỢC (BẢN RÚT GỌN ĐÃ TEST)
+    function updateCounter() {
+      // Ngày bắt đầu: 19/11/2023 00:00:00 (giờ Việt Nam)
+      const startDate = new Date("2023-11-19T00:00:00+07:00").getTime();
+      
+      // Lấy giờ Việt Nam hiện tại
+      const nowVietnam = new Date(
+        new Date().toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" })
+      ).getTime();
+      
+      const diff = nowVietnam - startDate;
+      
+      if (diff < 0) {
+        document.getElementById('years').textContent = "00";
+        document.getElementById('days').textContent = "000";
+        document.getElementById('hours').textContent = "00";
+        document.getElementById('minutes').textContent = "00";
+        document.getElementById('seconds').textContent = "00";
+        return;
+      }
+
+      // Tính toán thời gian
+      const totalSeconds = Math.floor(diff / 1000);
+      const years = Math.floor(totalSeconds / (365 * 24 * 60 * 60));
+      const remainingAfterYears = totalSeconds % (365 * 24 * 60 * 60);
+      const days = Math.floor(remainingAfterYears / (24 * 60 * 60));
+      const hours = Math.floor((remainingAfterYears % (24 * 60 * 60)) / (60 * 60));
+      const minutes = Math.floor((remainingAfterYears % (60 * 60)) / 60);
+      const seconds = Math.floor(remainingAfterYears % 60);
+
+      // Cập nhật UI
+      document.getElementById('years').textContent = String(years).padStart(2, '0');
+      document.getElementById('days').textContent = String(days).padStart(3, '0');
+      document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+      document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    }
+
+    // Chạy đồng hồ
+    setInterval(updateCounter, 1000);
+    updateCounter(); // Chạy ngay khi tải trang
+  </script>
+</body>
+</html>
